@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+</head>
+
+<body>
+
+    
+    <h1 class="container" id="title">Heart Disease Prediction</h1>
+    <div class="logo">
+        <img src="{{ url_for('static', filename='heart_logo.png') }}" alt="aaa">
+    </div>
+   
+  
+    <form class="myForm" onsubmit="return false">
+  
+
+        <h2 id="infoHeader" class="header">Patient Information</h2>
+
+        <div id="patientInfo">
+
+            <div>
+                <label for="firstName">First Name</label>
+                <input type="text" id="firstName" name="firstName" class="namesInput" required>
+            </div>
+
+            <div>
+                <label for="lastName">Last Name</label>
+                <input type="text" id="lastName" name="lastName" class="namesInput" required>
+            </div>
+
+            <div class="container-flex">
+                <div>
+                    <label for="age">Age</label>
+                    <input class="number" type="number" min="0" id="age" name="age" required>
+                </div>
+                <div>
+                    <label for="gender">Gender</label>
+                    <select id="gender" name="gender">
+                        <option value="female">Female</option>
+                        <option value="male">Male</option>
+                    </select>
+                </div>
+            </div>
+
+
+        </div>
+
+        <h2 id="healthData" class="header">Patient Health Data</h2>
+
+        <div id="healthDataInfo">
+
+            <div>
+                <label for="cp">Chest Pain Type</label>
+                <select id="cp" name="cp">
+                    <option value="0">typical angina</option>
+                    <option value="1">atypical angina</option>
+                    <option value="2">non-anginal pain</option>
+                    <option value="3">asymptomatic</option>
+                </select>
+            </div>
+            <div>
+                <label for="trestbps">Resting Blood Pressure</label>
+                <input class="number" type="number" id="trestbps" name="trestbps" required>
+            </div>
+
+            <div>
+                <label for="chol">Serum Cholestoral in mg/di(chol)</label>
+                <input class="number" type="number" id="chol" name="chol" required>
+            </div>
+
+            <div>
+                <label for="fbs">fasting blood sugar > 120 mg/dl</label>
+                <select id="fbs" name="fbs">
+                    <option value="0">False</option>
+                    <option value="1">True</option>
+                </select>
+            </div>
+            <div>
+                <label for="restecg">Resting electrocardiographic results</label>
+                <select id="restecg" name="restecg">
+                    <option value="0">Normal</option>
+                    <option value="1">Having ST-T wave abnormality</option>
+                </select>
+            </div>
+            <div>
+                <label for="thalach">Maximum heart rate achieved</label>
+                <input class="number" type="number" id="thalach" name="thalach" required>
+            </div>
+
+            <div>
+                <label for="exang">Exercise induced angina</label>
+                <select id="exang" name="exang">
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </select>
+            </div>
+            <div>
+                <label for="oldpeak">ST depression induced by exercise relative to rest</label>
+                <input class="number" type="number" min="0" step="0.1" id="oldpeak" name="oldpeak" required>
+            </div>
+
+            <div>
+                <label for="slope">The slope of the peak exercise ST segment</label>
+                <select id="slope" name="slope">
+                    <option value="0">Upsloping</option>
+                    <option value="1">Flat</option>
+                    <option value="2">Downsloping</option>
+                </select>
+            </div>
+
+        </div>
+
+        <label for="ca">number of major vessels (0-3) colored by flourosopy</label>
+        <input type="number" min="0" max=3 id="ca" name="ca" required>
+        <label for="thal">Thal:</label>
+        <select id="thal" name="thal">
+            <option value="0">Normal</option>
+            <option value="1">Fixed</option>
+            <option value="2">Reversible Defect</option>
+        </select>
+        <button id="submitButton" onclick="validateForm()">Submit</button>
+
+    </form>
+
+    <h1 id="result">{{variable}}</h1>
+
+
+    <form method="POST" action="/details">
+        <div id="detailsButtonDiv">
+            <input id="detailsButton" type="submit" value="Details">
+        </div>
+    </form>
+</body>
+
+
+
+<script>
+
+
+
+    function validateForm() {
+        const firstName = document.getElementById("firstName").value
+        const lastName = document.getElementById("lastName").value
+
+
+
+        const age = document.getElementById("age").value;
+        const gender = document.getElementById("gender").value;
+        const genderCode = gender === "male" ? 1 : 0;
+        const cp = document.getElementById("cp").value;
+        const trestbps = document.getElementById("trestbps").value;
+        const chol = document.getElementById("chol").value
+        const fbs = document.getElementById("fbs").value;
+        const restecg = document.getElementById("restecg").value
+        const thalach = document.getElementById("thalach").value
+        const exang = document.getElementById("exang").value
+        const oldpeak = document.getElementById("oldpeak").value
+        const slope = document.getElementById("slope").value
+        const ca = document.getElementById("ca").value
+        const thal = document.getElementById("thal").value
+
+
+
+        const formFields = ["firstName", "lastName", "age", "gender", "cp", "trestbps", "chol", "fbs", "restecg", "thalach", "exang", "oldpeak", "slope", "ca", "thal"];
+        const input_data = [parseInt(age), genderCode, parseInt(cp), parseInt(trestbps), parseInt(chol), parseInt(fbs), parseInt(restecg), parseInt(thalach), parseInt(exang), parseFloat(oldpeak), parseInt(slope), parseInt(ca), parseInt(thal)];
+        let isEmptyValue = false
+
+
+        for (let i = 0; i < formFields.length; i++) {
+            const field = document.getElementById(formFields[i]).value;
+            if (field === "") {
+                console.log("Lütfen tüm alanları doldurun.");
+                isEmptyValue = true
+                break
+            }
+        }
+        if (isEmptyValue == false) {
+            document.querySelector("#result").innerText = firstName + " " + lastName
+            fetch("/buttonClicked", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(input_data)
+
+            })
+
+                .then(response => response.text())
+                .then(data => {
+
+                    document.querySelector("#result").innerText += data
+
+                    console.log(data)
+                    console.log(firstName)
+                })
+                .catch(error => {
+                    console.error("Hata oluştu:", error);
+                });
+
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+</script>
+
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='details.css') }}">
+    <title>Document</title>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Head Data</h1>
+        <pre>{{ head_data }}</pre>
+    </div>
+  
+    <div class="container">
+        <h1>Tail Data</h1>
+        <pre>{{ tail_data }}</pre>
+    </div>
+   
+
+    <h1>Shape Data</h1>
+    <p>{{ shape_data }}</p>
+    
+    <h1>Empty Data</h1>
+    <p>{{ heart_data_isnull }}</p>
+
+    <h1>Train Data Accuracy</h1>
+    <p>{{ training_data_accuracy }}</p>
+
+    <h1>Test Data Accuracy</h1>
+    <p>{{ test_data_accuracy }}</p>
+
+    <div class="container-flex">
+        <button id="returnMainMenu">Return to Main Menu</button>
+    </div>
+   
+    
+</body>
+
+<script>
+    let btn = document.getElementById("returnMainMenu")
+    btn.addEventListener("click",function(){
+        window.location.assign("http://127.0.0.1:8000")
+    })
+   
+</script>
+</html>
